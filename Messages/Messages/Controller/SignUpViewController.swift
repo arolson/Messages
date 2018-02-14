@@ -14,7 +14,7 @@ import SwiftKeychainWrapper
 import Eureka
 
 class SignUpViewController: FormViewController, UINavigationControllerDelegate, UITextFieldDelegate {
-    
+
     var userUid: String!
     var email: String!
     var password: String!
@@ -26,6 +26,7 @@ class SignUpViewController: FormViewController, UINavigationControllerDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         buidForm()
+        addTapGesture()
     }
     override func viewWillAppear(_ animated: Bool) {
         subscribeToKeyboardNotifications()
@@ -111,7 +112,6 @@ extension SignUpViewController {
             })
         }
     }
-    
     /*
      MARK: Form Builder
      - Name Row

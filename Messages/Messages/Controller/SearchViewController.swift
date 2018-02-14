@@ -33,6 +33,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBAction func goBack(_ sender: AnyObject) {
         dismiss(animated: true, completion: nil)
     }
+    //    MARK: TableView Delegat
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -58,6 +59,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
             return SearchCell()
         }
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if isSearching {
             recipient = filteredData[indexPath.row].userKey
@@ -66,6 +68,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         performSegue(withIdentifier: "toMessage", sender: nil)
     }
+    //    MARK: Searchbar Delegat
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == nil || searchBar.text == "" {
             isSearching = false
@@ -73,10 +76,17 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
             table.reloadData()
         } else {
             isSearching = true
-            filteredData = searchDetail.filter({ $0.username == searchBar.text})
+            filteredData = searchDetail.filter({ user in
+                let username = user.username.lowercased()
+                if let searchbarText = self.searchBar.text?.lowercased() {
+                    return username.range(of: searchbarText) != nil
+                }
+                return false
+            })
             table.reloadData()
         }
     }
+    //    MARK: Prepare For Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? MessageViewController {
             destination.recipient = recipient

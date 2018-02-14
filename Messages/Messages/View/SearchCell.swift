@@ -14,6 +14,7 @@ import SwiftKeychainWrapper
 
 class SearchCell: UITableViewCell {
 
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     var searchDetail: Search!
@@ -31,19 +32,29 @@ class SearchCell: UITableViewCell {
         self.searchDetail = searchDetail
         nameLabel.text = searchDetail.username
         let reference = Storage.storage().reference(forURL: searchDetail.userImage)
+        startIndicator()
         reference.getData(maxSize: 1000000) { (data, error) in
             if error != nil {
-                print("Error: while retrieving userimage")
+                print("Error: \(error!.localizedDescription)")
+                self.stopIndicator()
             } else {
                 if let imageData = data {
                     if let image = UIImage(data: imageData) {
-                        performUIUpdatesOnMain {
-                            self.profileImage.image = image
-                        }
+                        self.profileImage.image = image
+                        self.stopIndicator()
                     }
                 }
             }
         }
     }
-
+    func startIndicator(){
+        profileImage.isHidden = true
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+    }
+    func stopIndicator(){
+        profileImage.isHidden = false
+        activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
+    }
 }

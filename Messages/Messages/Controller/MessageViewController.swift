@@ -31,16 +31,12 @@ class MessageViewController: UIViewController, UITableViewDelegate, UITableViewD
         if (messageId != nil && messageId != "") {
             loadData()
         }
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
+        addTapGesture()
         dispatchAfter {
             self.moveToBottom()
         }
     }
     
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-    }
     override func viewWillAppear(_ animated: Bool) {
         subscribeToKeyboardNotifications()
     }
@@ -202,6 +198,14 @@ extension MessageViewController {
         let firebaseMessage = Database.database().reference().child(DatabaseConstants.users).child(currentUser!)
             .child(DatabaseConstants.messages).child(messageId)
         firebaseMessage.setValue(post)
+    }
+    func deleteConversation() {
+        if let currentUserId = Auth.auth().currentUser?.uid {
+            //1. Will need to delete from current user
+            
+            //2. Delete from recipient messages
+            
+        }
     }
 }
 

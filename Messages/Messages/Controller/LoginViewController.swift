@@ -13,6 +13,7 @@ import SwiftKeychainWrapper
 class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var signInButton: UIButton!
     @IBOutlet weak var signUpButton: UIButton!
     
@@ -23,6 +24,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         emailField.delegate = self
         passwordField.delegate = self
         setupButtons()
+        addTapGesture()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -76,7 +78,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 }
 extension LoginViewController {
     func signIn(email: String, password: String) {
-        print("Going to sign in")
+        startIndicator()
         Auth.auth().signIn(withEmail: email, password: password, completion: {
             (user, error) in
             if error == nil {
@@ -86,7 +88,9 @@ extension LoginViewController {
             } else {
                 let errorMessage = "Email and password do not match"
                 self.displayErrorAlert(errorMessage)
+                self.stopIndicator()
             }
+            self.stopIndicator()
         })
     }
     func invalidEmailOrPassword() {
@@ -94,10 +98,19 @@ extension LoginViewController {
         self.displayErrorAlert(errorMessage)
     }
     func setupButtons() {
+        activityIndicator.isHidden = true
         signInButton.layer.cornerRadius = 5
         signInButton.layer.masksToBounds = true
         signUpButton.layer.cornerRadius = 5
         signUpButton.layer.masksToBounds = true
+    }
+    func startIndicator(){
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+    }
+    func stopIndicator(){
+        activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
     }
 }
 
