@@ -17,6 +17,7 @@ class SearchViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     var searchDetail = [Search]()
     var filteredData = [Search]()
+    
     var isSearching = false
     var detail: Search!
     var recipient: String!

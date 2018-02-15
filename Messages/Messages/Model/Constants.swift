@@ -16,6 +16,7 @@ struct DatabaseConstants {
     static let recipient = "recipient"
     static let messages = "messages"
     static let lastMessage = "lastmessage"
+    static let blocked = "blocked_users"
 }
 struct SegueConstants {
     static let toMessages = "toMessages"

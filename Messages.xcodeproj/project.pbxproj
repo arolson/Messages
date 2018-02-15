@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		37BCD06BEE8C5A1035A620AD /* Pods_MessagesUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B8E62E204911A0BD268E07B /* Pods_MessagesUITests.framework */; };
+		493857D7203547180054F1C5 /* blockedUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493857D6203547180054F1C5 /* blockedUsers.swift */; };
 		493B01BE202FBEB400890589 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493B01BD202FBEB400890589 /* SearchViewController.swift */; };
 		493B01C0202FC0C300890589 /* SearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493B01BF202FC0C300890589 /* SearchCell.swift */; };
 		493B01C2202FC2FD00890589 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 493B01C1202FC2FD00890589 /* Search.swift */; };
@@ -58,6 +59,7 @@
 		168368650FD0D4501C312539 /* Pods_MessagesTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MessagesTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		37270161CD3036D5ABF8B421 /* Pods-MessagesUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MessagesUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MessagesUITests/Pods-MessagesUITests.release.xcconfig"; sourceTree = "<group>"; };
 		3F3EB6AFE1321E68BD3E8A46 /* Pods-MessagesUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MessagesUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MessagesUITests/Pods-MessagesUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		493857D6203547180054F1C5 /* blockedUsers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = blockedUsers.swift; sourceTree = "<group>"; };
 		493B01BD202FBEB400890589 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		493B01BF202FC0C300890589 /* SearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCell.swift; sourceTree = "<group>"; };
 		493B01C1202FC2FD00890589 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 				4963818E2026A65E00BA9147 /* Message.swift */,
 				496381902026B3DD00BA9147 /* ViewControllerExtension.swift */,
 				493B01C1202FC2FD00890589 /* Search.swift */,
+				493857D6203547180054F1C5 /* blockedUsers.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -572,6 +575,7 @@
 				496381812023F72A00BA9147 /* MessagesDetailCell.swift in Sources */,
 				4971F1A420227D6800B946C0 /* LoginViewController.swift in Sources */,
 				493B01BE202FBEB400890589 /* SearchViewController.swift in Sources */,
+				493857D7203547180054F1C5 /* blockedUsers.swift in Sources */,
 				4963817F2023F5D000BA9147 /* ChatViewController.swift in Sources */,
 				49638185202407A700BA9147 /* Constants.swift in Sources */,
 				4963818F2026A65E00BA9147 /* Message.swift in Sources */,

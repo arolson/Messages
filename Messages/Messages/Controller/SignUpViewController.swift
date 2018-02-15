@@ -26,7 +26,6 @@ class SignUpViewController: FormViewController, UINavigationControllerDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         buidForm()
-        addTapGesture()
     }
     override func viewWillAppear(_ animated: Bool) {
         subscribeToKeyboardNotifications()
@@ -65,8 +64,6 @@ class SignUpViewController: FormViewController, UINavigationControllerDelegate, 
 }
 
 extension SignUpViewController {
-    
-    
     func uploadImg() {
         if let imgData = UIImageJPEGRepresentation(image, 0.2) {
             let imgUid = NSUUID().uuidString
@@ -99,19 +96,6 @@ extension SignUpViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    //To delete a user
-    func deleteProfile() {
-        if let currentUserId = Auth.auth().currentUser?.uid {
-            Database.database().reference().child(DatabaseConstants.users).child(currentUserId).removeValue(completionBlock:
-            { (error, reference) in
-                if error != nil {
-                    print("\(error!.localizedDescription)")
-                } else {
-                    print("Account deleted Correctly: \n \(reference)")
-                }
-            })
-        }
-    }
     /*
      MARK: Form Builder
      - Name Row

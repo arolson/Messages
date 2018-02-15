@@ -150,7 +150,7 @@ extension MessageViewController {
         messageField.layer.masksToBounds = true
     }
     func messageFieldConfig() {
-        messageField.font = UIFont(name: "Arial", size: 18)
+        messageField.font = UIFont(name: "Arial", size: 17)
     }
     func resetViews() {
         //Reset the Message Field
@@ -198,14 +198,6 @@ extension MessageViewController {
         let firebaseMessage = Database.database().reference().child(DatabaseConstants.users).child(currentUser!)
             .child(DatabaseConstants.messages).child(messageId)
         firebaseMessage.setValue(post)
-    }
-    func deleteConversation() {
-        if let currentUserId = Auth.auth().currentUser?.uid {
-            //1. Will need to delete from current user
-            
-            //2. Delete from recipient messages
-            
-        }
     }
 }
 
