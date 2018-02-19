@@ -9,6 +9,9 @@
 import UIKit
 import Firebase
 import SwiftKeychainWrapper
+import UserNotifications
+import FirebaseInstanceID
+import FirebaseMessaging
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var emailField: UITextField!
@@ -26,17 +29,18 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         setupButtons()
         addTapGesture()
     }
-    
+    // Subscribe to Keyboard notifications
     override func viewWillAppear(_ animated: Bool) {
         subscribeToKeyboardNotifications()
     }
-
+    // Checks if the uid is set then moves to Messages
     override func viewDidAppear(_ animated: Bool) {
         if let _ = KeychainWrapper.standard.string(forKey: DatabaseConstants.uid) {
             performSegue(withIdentifier: SegueConstants.toMessages, sender: nil)
         }
         unsubscribeToKeyboardNotifications()
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == SegueConstants.toSignUp {
             if let destination = segue.destination as? SignUpViewController {
@@ -52,6 +56,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }
+    // Sign in
     @IBAction func SignIn(_ sender: AnyObject) {
         if let email = emailField.text, let password = passwordField.text {
             if email.isEmail && password.isPassword {
@@ -61,6 +66,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }
+    // Sign up
     @IBAction func signUp(_ sender: AnyObject) {
         if let email = emailField.text, let password = passwordField.text {
             if email.isEmail && password.isPassword {
@@ -71,12 +77,23 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }
+    // reset password
+    @IBAction func passwordReset(_ sender: Any) {
+        guard let email = emailField.text, email.isEmail else {
+            displayAlert("Please enter a valid email")
+            return
+        }
+        resetPassword(email: email)
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
     }
 }
 extension LoginViewController {
+    
+    // Authentication method for signing in
     func signIn(email: String, password: String) {
         startIndicator()
         Auth.auth().signIn(withEmail: email, password: password, completion: {
@@ -84,19 +101,29 @@ extension LoginViewController {
             if error == nil {
                 self.userUid = user?.uid
                 KeychainWrapper.standard.set(self.userUid, forKey: DatabaseConstants.uid)
+                
+                if AppDelegate.deviceId != "" {
+                    let reference = Database.database().reference().child(DatabaseConstants.users).child(self.userUid)
+                    reference.updateChildValues(
+                        [DatabaseConstants.fromDevice: AppDelegate.deviceId]
+                    )
+                }
+                
                 self.performSegue(withIdentifier: SegueConstants.toMessages, sender: nil)
             } else {
                 let errorMessage = "Email and password do not match"
-                self.displayErrorAlert(errorMessage)
+                self.displayAlert(errorMessage)
                 self.stopIndicator()
             }
             self.stopIndicator()
         })
     }
+    
     func invalidEmailOrPassword() {
         let errorMessage = "Email must be valid, and password must conform to the following: \n Have at least one uppercase letter \n At least one digit \n At least one lowercase \n And have at least 8 characters total"
-        self.displayErrorAlert(errorMessage)
+        self.displayAlert(errorMessage)
     }
+    
     func setupButtons() {
         activityIndicator.isHidden = true
         signInButton.layer.cornerRadius = 5
@@ -104,27 +131,25 @@ extension LoginViewController {
         signUpButton.layer.cornerRadius = 5
         signUpButton.layer.masksToBounds = true
     }
+    // Start Indicator
     func startIndicator(){
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
     }
+    // Stop Indicator
     func stopIndicator(){
         activityIndicator.isHidden = true
         activityIndicator.stopAnimating()
     }
+    // Password reset
+    func resetPassword(email: String) {
+        Auth.auth().sendPasswordReset(withEmail: email) { (error) in
+            if error != nil {
+                self.displayAlert(error!.localizedDescription)
+            } else {
+                self.displayAlert("We have sent you an email for password reset")
+            }
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

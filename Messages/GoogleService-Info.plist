@@ -7,21 +7,21 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>655964538095-7iefa7o61cuq9rtdh09decqgs1ou8s6f.apps.googleusercontent.com</string>
+	<string>699787459994-mbfhapo8fmsnap2a6nn86f44s5phebjs.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.655964538095-7iefa7o61cuq9rtdh09decqgs1ou8s6f</string>
+	<string>com.googleusercontent.apps.699787459994-mbfhapo8fmsnap2a6nn86f44s5phebjs</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCYwkMaLYfH14uGIbTzqtI9UoRMafsuWu4</string>
+	<string>AIzaSyDYfnQR8RdR9z7oTZvRg2_ZAAe_v2pIf1Q</string>
 	<key>GCM_SENDER_ID</key>
-	<string>655964538095</string>
+	<string>699787459994</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.AndrewOlson.Messages</string>
+	<string>com.AndrewOlson.MessagesApp</string>
 	<key>PROJECT_ID</key>
-	<string>messages-1090f</string>
+	<string>messages-2685a</string>
 	<key>STORAGE_BUCKET</key>
-	<string>messages-1090f.appspot.com</string>
+	<string>messages-2685a.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<true></true>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -33,8 +33,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:655964538095:ios:6c3df5af5906406c</string>
+	<string>1:699787459994:ios:300d08cf8c203055</string>
 	<key>DATABASE_URL</key>
-	<string>https://messages-1090f.firebaseio.com</string>
+	<string>https://messages-2685a.firebaseio.com</string>
 </dict>
 </plist>

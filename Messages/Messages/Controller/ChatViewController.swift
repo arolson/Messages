@@ -19,6 +19,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     var currentUser = KeychainWrapper.standard.string(forKey: DatabaseConstants.uid)
     var recipient: String!
     var messageId: String!
+    var toDevice: String!
     let cellIdentifier = "MessagesCell"
     
     
@@ -39,6 +40,9 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     //MARK: Number of Sections
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
+    }
+    @IBAction func editProfile(_ sender: Any) {
+        self.performSegue(withIdentifier: SegueConstants.toEdit, sender: nil)
     }
     
     //MARK: Number Of Rows In Section
@@ -62,6 +66,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         recipient = messageDetail[indexPath.row].recipient
         messageId = messageDetail[indexPath.row].messageRef.key
+        toDevice = messageDetail[indexPath.row].toDevice
         performSegue(withIdentifier: SegueConstants.toMessages, sender: nil)
     }
     
@@ -120,11 +125,13 @@ extension ChatViewController {
             self.table.reloadData()
         }
     }
+    // Filter out all blocked users
     func filterBlockedUsers() {
         messageDetail = messageDetail.filter({ (messageDetail) -> Bool in
             return !(self.blockedUsers.contains(where:{$0.blockedUser == messageDetail.recipient}))
         })
     }
+    // Delete the conversation
     func deleteConversation(key: String, recipient: String) {
         if let currentUserId = Auth.auth().currentUser?.uid {
             //1. Will need to delete from current user
@@ -136,6 +143,11 @@ extension ChatViewController {
             var recipientReference = Database.database().reference().child(DatabaseConstants.users).child(recipient)
             recipientReference = recipientReference.child(DatabaseConstants.messages).child(key)
             recipientReference.removeValue()
+            
+            //3. Delete from messages
+            var messagesReference = Database.database().reference().child(DatabaseConstants.messages)
+            messagesReference = messagesReference.child(key)
+            messagesReference.removeValue()
             print("Conversation Successfully removed")
         }
     }

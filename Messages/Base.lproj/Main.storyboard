@@ -4,13 +4,16 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
+        <array key="Arial.ttf">
+            <string>ArialMT</string>
+        </array>
         <array key="ArialBold.ttf">
             <string>Arial-BoldMT</string>
         </array>
@@ -69,6 +72,10 @@
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="MSG-ct-yw6">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <color key="backgroundColor" red="0.66422420739999999" green="0.66424006219999998" blue="0.66423153879999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="2sr-GM-1Xh"/>
+                                            <constraint firstAttribute="width" constant="50" id="qqB-Au-hei"/>
+                                        </constraints>
                                     </activityIndicatorView>
                                 </subviews>
                                 <constraints>
@@ -76,11 +83,18 @@
                                     <constraint firstAttribute="height" constant="50" id="YHb-t5-gVj"/>
                                 </constraints>
                             </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ac6-fD-Iva">
+                                <rect key="frame" x="120.33333333333331" y="484" width="174" height="31"/>
+                                <fontDescription key="fontDescription" name="ArialMT" family="Arial" pointSize="17"/>
+                                <state key="normal" title="Forgot your password?"/>
+                                <connections>
+                                    <action selector="passwordReset:" destination="BYZ-38-t0r" eventType="touchUpInside" id="yxg-oD-Zm9"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Ft3-de-LtZ" secondAttribute="bottom" constant="5" id="565-xF-JXr"/>
-                            <constraint firstItem="MSG-ct-yw6" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="182" id="BXP-Ou-qtH"/>
                             <constraint firstItem="OYE-l4-RYN" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="141" id="HQm-iX-xfy"/>
                             <constraint firstItem="MSG-ct-yw6" firstAttribute="top" relation="greaterThanOrEqual" secondItem="OYE-l4-RYN" secondAttribute="bottom" constant="20" id="Iyy-CC-fXx"/>
                             <constraint firstItem="HvE-NS-3gN" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="Mfh-SK-OAx"/>
@@ -96,8 +110,9 @@
                             <constraint firstItem="Ft3-de-LtZ" firstAttribute="centerX" secondItem="HvE-NS-3gN" secondAttribute="centerX" id="dVT-te-CDd"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="OYE-l4-RYN" secondAttribute="trailing" constant="20" id="gpO-cj-dOr"/>
                             <constraint firstItem="OYE-l4-RYN" firstAttribute="trailing" secondItem="ENa-es-rSc" secondAttribute="trailing" id="mvY-ry-Azk"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="MSG-ct-yw6" secondAttribute="trailing" constant="182" id="qkw-9U-6GQ"/>
                             <constraint firstItem="ENa-es-rSc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="xSf-eu-cn7"/>
+                            <constraint firstItem="ac6-fD-Iva" firstAttribute="centerX" secondItem="Ft3-de-LtZ" secondAttribute="centerX" id="xWy-IQ-xcu"/>
+                            <constraint firstItem="ac6-fD-Iva" firstAttribute="top" secondItem="Ft3-de-LtZ" secondAttribute="bottom" constant="7.3333333333333144" id="ymA-gb-Kiq"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ENa-es-rSc" secondAttribute="trailing" constant="20" id="zWX-cK-EaA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -242,7 +257,7 @@
                                 <rect key="frame" x="0.0" y="64" width="414" height="672"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" restorationIdentifier="MessagesCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MessagesCell" rowHeight="80" id="H9J-jz-rcY" customClass="MessagesDetailCell" customModule="Messages" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" restorationIdentifier="MessagesCell" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="MessagesCell" rowHeight="80" id="H9J-jz-rcY" customClass="MessagesDetailCell" customModule="Messages" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="H9J-jz-rcY" id="ekh-Xl-RDe">
@@ -311,12 +326,21 @@
                                                 <action selector="signOut:" destination="un7-ti-dBu" id="4Hx-CN-bKb"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="XBZ-Yr-xee">
-                                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                            <connections>
-                                                <segue destination="jbA-x4-fpa" kind="show" identifier="toSearch" id="ZWp-8K-3nD"/>
-                                            </connections>
-                                        </barButtonItem>
+                                        <rightBarButtonItems>
+                                            <barButtonItem style="done" systemItem="add" id="XBZ-Yr-xee">
+                                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <connections>
+                                                    <segue destination="jbA-x4-fpa" kind="show" identifier="toSearch" id="ZWp-8K-3nD"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem style="done" systemItem="edit" id="wva-Bm-tRk">
+                                                <color key="tintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <connections>
+                                                    <action selector="editProfile:" destination="un7-ti-dBu" id="1eH-jW-5Yf"/>
+                                                    <segue destination="aiZ-Eq-eoI" kind="show" identifier="toEditProfile" id="VpZ-lY-I0Y"/>
+                                                </connections>
+                                            </barButtonItem>
+                                        </rightBarButtonItems>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -371,7 +395,7 @@
                                 <rect key="frame" x="0.0" y="64" width="414" height="625"/>
                                 <color key="backgroundColor" red="0.92143100499999997" green="0.92145264149999995" blue="0.92144101860000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MessageCell" rowHeight="80" id="Ta6-XZ-zJG" customClass="MessageCell" customModule="Messages" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="MessageCell" rowHeight="80" id="Ta6-XZ-zJG" customClass="MessageCell" customModule="Messages" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="414" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Ta6-XZ-zJG" id="cMw-ci-GaD">
@@ -379,10 +403,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UKI-Z5-Bpv">
-                                                    <rect key="frame" x="15" y="11" width="10" height="58"/>
+                                                    <rect key="frame" x="15" y="11" width="324" height="58"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="11" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vic-et-xi9">
-                                                            <rect key="frame" x="5" y="5" width="0.0" height="48"/>
+                                                            <rect key="frame" x="5" y="5" width="314" height="48"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="bpA-Zv-6je"/>
+                                                            </constraints>
                                                             <attributedString key="attributedText"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
@@ -401,6 +428,9 @@
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="11" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RGN-eJ-4LR">
                                                             <rect key="frame" x="5" y="5" width="0.0" height="48"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="Lzu-2n-cXR"/>
+                                                            </constraints>
                                                             <attributedString key="attributedText"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
@@ -519,9 +549,24 @@
             </objects>
             <point key="canvasLocation" x="443" y="813"/>
         </scene>
+        <!--Update Users View Controller-->
+        <scene sceneID="843-c8-TE5">
+            <objects>
+                <viewController id="aiZ-Eq-eoI" customClass="UpdateUsersViewController" customModule="Messages" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="REm-YW-SDg">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.0" green="0.6588235294" blue="0.41960784309999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <viewLayoutGuide key="safeArea" id="uuU-oy-hdX"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="H9G-bD-XOu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1222" y="813"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="7i7-gE-awc"/>
+        <segue reference="L28-sc-cfx"/>
         <segue reference="pKM-Aj-wqz"/>
     </inferredMetricsTieBreakers>
 </document>

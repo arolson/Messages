@@ -10,8 +10,11 @@ target 'Messages' do
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
   pod 'Firebase/Storage'
+  pod 'Firebase/Messaging'
   pod 'SwiftKeychainWrapper'
   pod 'Eureka'
+  pod 'Alamofire', '~> 4.5'
+
   target 'MessagesTests' do
     inherit! :search_paths
     # Pods for testing

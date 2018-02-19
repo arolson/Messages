@@ -17,8 +17,11 @@ struct DatabaseConstants {
     static let messages = "messages"
     static let lastMessage = "lastmessage"
     static let blocked = "blocked_users"
+    static let fromDevice = "fromDevice"
+    static let toDevice = "toDevice"
 }
 struct SegueConstants {
     static let toMessages = "toMessages"
     static let toSignUp = "toSignUp"
+    static let toEdit = "toEditProfile"
 }

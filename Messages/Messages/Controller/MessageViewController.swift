@@ -10,9 +10,10 @@ import UIKit
 import Firebase
 import FirebaseDatabase
 import SwiftKeychainWrapper
+import Alamofire
 
 class MessageViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextViewDelegate {
-    let cellIdentifier = "MessageCell"
+    
     @IBOutlet weak var table: UITableView!
     @IBOutlet weak var messageField: UITextView!
     // Text View constraint for resizing
@@ -23,15 +24,23 @@ class MessageViewController: UIViewController, UITableViewDelegate, UITableViewD
     var currentUser = KeychainWrapper.standard.string(forKey: DatabaseConstants.uid)
     var message: Message!
     var recipient: String!
+    var toDevice = ""
+    let cellIdentifier = "MessageCell"
+    var badgeNumber = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Setup views for display
         configureViews()
-        messageFieldConfig()
+        // Load tokens if they have not been already
+        loadTokens()
+        //Load Message data if not a new message
         if (messageId != nil && messageId != "") {
             loadData()
         }
+        // Tap gesture for keyboard
         addTapGesture()
+        // Move to the latest message
         dispatchAfter {
             self.moveToBottom()
         }
@@ -50,62 +59,34 @@ class MessageViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     @IBAction func sendPressed (_ sender: AnyObject) {
+        // Reset the Message Field
         resetViews()
-        
         if messageField.text != nil && messageField.text != "" {
             
             if messageId == nil {
-                let post: Dictionary<String, AnyObject> = [
-                    "message": messageField.text as AnyObject,
-                    "sender": recipient as AnyObject
-                ]
-                
-                let message: Dictionary<String, AnyObject> = [
-                    "lastmessage": messageField.text as AnyObject,
-                    "recipient": recipient as AnyObject
-                ]
-                
-                let recipientmessage: Dictionary<String, AnyObject> = [
-                    "lastmessage": messageField.text as AnyObject,
-                    "recipient": currentUser as AnyObject
-                ]
-                
+                //Set message Id
                 messageId = Database.database().reference().child(DatabaseConstants.messages).childByAutoId().key
-                
                 //Post
-                postMessages(post: post)
+                postMessages()
                 //User Messages
-                UserMessages(post: message)
+                UserMessages()
                 //Recipient Message
-                recipientMessages(post: recipientmessage)
+                recipientMessages()
                 loadData()
-                
             } else if messageId != "" {
-                let post: Dictionary<String, AnyObject> = [
-                    "message": messageField.text as AnyObject,
-                    "sender": recipient as AnyObject
-                ]
-                let message: Dictionary<String, AnyObject> = [
-                    "lastmessage": messageField.text as AnyObject,
-                    "recipient": recipient as AnyObject
-                ]
-                let recipientmessage: Dictionary<String, AnyObject> = [
-                    "lastmessage": messageField.text as AnyObject,
-                    "recipient": currentUser as AnyObject
-                ]
-        
                 //Post
-                postMessages(post: post)
+                postMessages()
                 //User Messages
-                UserMessages(post: message)
+                UserMessages()
                 //Recipient Message
-                recipientMessages(post: recipientmessage)
+                recipientMessages()
                 loadData()
             }
             messageField.text = ""
         }
         moveToBottom()
     }
+    
     //MARK: Number of Sections
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -139,6 +120,7 @@ class MessageViewController: UIViewController, UITableViewDelegate, UITableViewD
         return true
     }
 }
+
 extension MessageViewController {
     func configureViews() {
         table.delegate = self
@@ -148,16 +130,63 @@ extension MessageViewController {
         messageField.delegate = self
         messageField.layer.cornerRadius = 5
         messageField.layer.masksToBounds = true
+         messageField.font = UIFont(name: "Arial", size: 17)
     }
-    func messageFieldConfig() {
-        messageField.font = UIFont(name: "Arial", size: 17)
-    }
+
     func resetViews() {
         //Reset the Message Field
         self.messageField.isScrollEnabled = false
         moveToBottom()
     }
     
+    // Load tokens if they have not been already
+    func loadTokens() {
+        if toDevice == "" {
+            loadtoDeviceToken()
+            print("toDevice: \(toDevice)")
+        }
+        
+        if AppDelegate.deviceId == "" {
+            loadFromDeviceToken()
+            print("AppDelegate: \(AppDelegate.deviceId)")
+        }
+    }
+    
+    // load recipient device token
+    func loadtoDeviceToken() {
+        let reference = Database.database().reference().child(DatabaseConstants.users).child(recipient).child(DatabaseConstants.fromDevice)
+        reference.observe(.value) { (snapshot) in
+            if snapshot.exists() {
+                if let deviceToken = snapshot.value as? String {
+                    self.toDevice = deviceToken
+                } else {
+                    self.toDevice = ""
+                    print("toDevice Token is empty")
+                }
+            } else {
+                print("Did not find token for toDevice")
+            }
+        }
+    }
+    
+    // Load currentUser device token
+    func loadFromDeviceToken() {
+        let reference = Database.database().reference().child(DatabaseConstants.users).child(currentUser!)
+        reference.observe(.value) { (snapshot) in
+            if snapshot.exists() {
+                if let deviceToken = snapshot.value as? String {
+                    AppDelegate.deviceId = deviceToken
+                }
+            } else {
+                print("Did not find token for Appdeleget.deviceId")
+            }
+        }
+    }
+    
+    /*
+     Mark: Load Messages from Messages database
+     Reference: Messages -> messageId
+     */
     func loadData() {
         let reference = Database.database().reference().child(DatabaseConstants.messages).child(messageId)
         reference.observe(.value) { (snapshot) in
@@ -175,33 +204,88 @@ extension MessageViewController {
         }
     }
     
+    /*
+     MARK: Post Message
+     Reference: Messages -> messageId -> new child
+     */
+    func postMessages() {
+        let post: Dictionary<String, AnyObject> = [
+            "message": messageField.text as AnyObject,
+            "sender": recipient as AnyObject,
+            DatabaseConstants.fromDevice : AppDelegate.deviceId as AnyObject,
+            DatabaseConstants.toDevice : toDevice as AnyObject
+        ]
+        
+        let firebaseMessage = Database.database().reference().child(DatabaseConstants.messages).child(messageId).childByAutoId()
+        firebaseMessage.setValue(post)
+        setupPushNotifications(fromDevice: AppDelegate.deviceId)
+    }
+    
+    /*
+     MARK: User Message
+     Reference: users -> currentUser -> messages -> messagesId
+     */
+    func UserMessages() {
+        let message: Dictionary<String, AnyObject> = [
+            "lastmessage": messageField.text as AnyObject,
+            "recipient": recipient as AnyObject,
+            DatabaseConstants.fromDevice : AppDelegate.deviceId as AnyObject,
+            DatabaseConstants.toDevice : toDevice as AnyObject
+        ]
+        
+        let firebaseMessage = Database.database().reference().child(DatabaseConstants.users).child(currentUser!)
+            .child(DatabaseConstants.messages).child(messageId)
+        firebaseMessage.setValue(message)
+    }
+    
+    /*
+     MARK: Recipient Message
+     Reference: users -> recipient -> messages -> messagesId
+     Note: Mirror of User Messages
+     */
+    func recipientMessages() {
+        let recipientmessage: Dictionary<String, AnyObject> = [
+            "lastmessage": messageField.text as AnyObject,
+            "recipient": currentUser as AnyObject,
+            DatabaseConstants.fromDevice : toDevice as AnyObject,
+            DatabaseConstants.toDevice : AppDelegate.deviceId as AnyObject
+        ]
+        
+        let firebaseMessage = Database.database().reference().child(DatabaseConstants.users).child(recipient)
+                                                             .child(DatabaseConstants.messages).child(messageId)
+        firebaseMessage.setValue(recipientmessage)
+    }
+    
+    // Move tableView to most recent message
     func moveToBottom () {
         if messages.count > 0 {
             let indexPath = IndexPath(row: messages.count - 1, section: 0)
             table.scrollToRow(at: indexPath, at: .bottom, animated: false)
         }
     }
-    
-    func postMessages(post: Dictionary<String, AnyObject>) {
-        let firebaseMessage = Database.database().reference().child(DatabaseConstants.messages).child(messageId).childByAutoId()
-        firebaseMessage.setValue(post)
-    }
-    
-    func recipientMessages(post: Dictionary<String, AnyObject>) {
-        let firebaseMessage = Database.database().reference().child(DatabaseConstants.users).child(recipient)
-                                                             .child(DatabaseConstants.messages).child(messageId)
-        firebaseMessage.setValue(post)
-    }
-    
-    func UserMessages(post: Dictionary<String, AnyObject>) {
-
-        let firebaseMessage = Database.database().reference().child(DatabaseConstants.users).child(currentUser!)
-            .child(DatabaseConstants.messages).child(messageId)
-        firebaseMessage.setValue(post)
+}
+//MARK: Push Notifications
+extension MessageViewController {
+    func setupPushNotifications(fromDevice: String) {
+        if self.toDevice == "" {return}
+        guard let message = messageField.text else {return}
+        
+        let title = "Message"
+        let body = message
+        let toDevice = self.toDevice
+        badgeNumber += 1
+        
+        var header: HTTPHeaders = HTTPHeaders()
+        header = ["Content-Type":"application/json", "Authorization" : "key=\(AppDelegate.server_key)"]
+        
+        let notification = ["to": "\(toDevice)", "notification":
+                ["body":body, "title":title,"badge": badgeNumber,"sound":"default"]
+            ] as [String : Any]
+        Alamofire.request(AppDelegate.notification_url as URLConvertible, method: .post as HTTPMethod, parameters: notification, encoding: JSONEncoding.default, headers: header).responseJSON { (response) in
+            print(response)
+        }
     }
 }
-
-
 
 
 

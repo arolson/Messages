@@ -7,7 +7,25 @@
 		<key>Messages.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>9</integer>
+			<integer>10</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>4971F19D20227D6800B946C0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4971F1B120227D6800B946C0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>4971F1BC20227D6800B946C0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
